@@ -158,7 +158,7 @@ export default defineComponent({
             border-radius: 4px;
             cursor: pointer;
             border: none;
-            background-color: #e50000;
+            background-color: #10bb2c;
             color: #fff;
 
             &:hover {
