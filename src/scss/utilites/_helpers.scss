@@ -1,0 +1,32 @@
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+}
+
+.justify {
+    text-align: justify;
+}
+
+.hidden {
+    display: none;
+}
+
+.centered {
+    text-align: center;
+    margin: 0 auto;
+}
+.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -o-user-select: none;
+    -moz-user-drag: -moz-none;
+    -khtml-user-drag: none;
+    -webkit-user-drag: none;
+    -o-user-drag: none;
+    user-select: none;
+    user-drag: none;
+}
