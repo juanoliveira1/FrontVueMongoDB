@@ -15,7 +15,7 @@ export default {
         }
 
         axios
-            .post('apimongodb.azurewebsites.net/Auth/login', UserLoginDto, {
+            .post('https://apimongodbv-2.azurewebsites.net/Auth/login', UserLoginDto, {
                 headers,
             })
             .then((response) => {
