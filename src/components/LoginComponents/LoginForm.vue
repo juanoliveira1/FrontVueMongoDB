@@ -2,43 +2,21 @@
     <section class="login-wrapper">
         <form class="login-wrapper__login-form" @submit.prevent="login">
             <transition name="fade">
-                <div
-                    v-if="loginFailed"
-                    class="login-wrapper__login-form__alert"
-                    data-cy="logAlert"
-                >
-                    Your email and/or password are incorrect!
+                <div v-if="loginFailed" class="login-wrapper__login-form__alert" data-cy="logAlert">
+                    Seu email e/ou senha estão incorretos.
                 </div>
             </transition>
 
-            <Form-Text-Field
-                fieldType="email"
-                labelTitle="Email"
-                labelLink=""
-                errorMessage="Email invalido."
-                @inputChanged="emailChanged"
-                :isValidInput="emailValid"
-                inputName="email"
-            />
+            <Form-Text-Field fieldType="email" labelTitle="Email" labelLink="" errorMessage="Email invalido."
+                @inputChanged="emailChanged" :isValidInput="emailValid" inputName="email" />
 
-            <Form-Text-Field
-                fieldType="password"
-                labelTitle="Senha"
-                :errorMessage="passwordErrorMessage"
-                @inputChanged="passwordChanged"
-                :isValidInput="passwordValid"
-                inputName="password"
-            />
+            <Form-Text-Field fieldType="password" labelTitle="Senha" :errorMessage="passwordErrorMessage"
+                @inputChanged="passwordChanged" :isValidInput="passwordValid" inputName="password" />
 
-            <button
-                class="login-wrapper__login-form__login-btn"
-                :class="{
-                    'login-wrapper__login-form__login-btn--disabled':
-                        LoginDisabled,
-                }"
-                :disabled="LoginDisabled"
-                data-cy="logBtn"
-            >
+            <button class="login-wrapper__login-form__login-btn" :class="{
+                'login-wrapper__login-form__login-btn--disabled':
+                    LoginDisabled,
+            }" :disabled="LoginDisabled" data-cy="logBtn">
                 Logar
             </button>
         </form>
@@ -99,7 +77,7 @@ export default defineComponent({
         }
 
         function validatePassword(password: string) {
-            if (password.length <= 6) {
+            if (password.length < 6) {
                 passwordErrorMessage.value =
                     'Senha deve ter 6 ou mais caracteres'
                 return false
@@ -110,8 +88,8 @@ export default defineComponent({
         const login = async () => {
             store.dispatch('login', {
                 email: emailInput.value,
-                password: passwordInput.value,
-            })
+                password: passwordInput.value})
+                
             const isAuthenticated = store.getters.isAuth
             isAuthenticated
                 ? router.push('/welcome')

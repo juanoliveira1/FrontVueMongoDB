@@ -8,4 +8,8 @@ export default {
     isAuth(state: State) {
         return state.isAuthenticated
     },
+
+    name(state: State){
+        return state.name ? state.name : ''
+    }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="welcome">
         <h1 data-cy="welMessage" class="welcome__message">
-            Welcome, {{ email }}
+            Bem-vindo(a), {{ name }}
         </h1>
 
         <button
@@ -23,6 +23,7 @@ export default {
     setup() {
         const store = useStore()
         const email = store.getters.userEmail
+        const name = store.getters.name
 
         function logout() {
             store.dispatch('logout')

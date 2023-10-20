@@ -12,14 +12,14 @@ const routes: Array<RouteRecordRaw> = [
         name: 'Login',
         component: () =>
             import(/* webpackChunkName: "login" */ '@/views/LoginView.vue'),
-        meta: { requiresGuest: true, title: 'Login | Instabug' },
+        meta: { requiresGuest: true, title: 'Login' },
     },
     {
         path: '/welcome',
         name: 'welcome',
         component: () =>
             import(/* webpackChunkName: "welcome" */ '@/views/WelcomeView.vue'),
-        meta: { requiresAuth: true, title: 'Welcome | Instabug' },
+        meta: { requiresAuth: true, title: 'Welcome' },
     },
     {
         path: '/404',
