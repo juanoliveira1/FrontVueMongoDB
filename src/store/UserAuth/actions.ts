@@ -21,19 +21,17 @@ export default {
             .then((response) => {
                 console.log(response);
                 if (response.status == 200) {
-                    if (response.data.token) {
-                        console.log('200');
-                        commit('login', user.email);
-                        localStorage.setItem('email', user.email);
-                        localStorage.setItem('name', user.name);
-                        router.push('/welcome');
-                    }
+                    console.log('200');
+                    commit('login', user.email);
+                    localStorage.setItem('email', user.email);
+                    localStorage.setItem('name', user.name);
+                    router.push('/welcome');
                 }
             })
             .catch((error) => {
 
                 console.error('Erro na requisição:', error)
-            })      
+            })
 
         // const userIndex = registeredUsers.findIndex(
         //     (usersData) =>
