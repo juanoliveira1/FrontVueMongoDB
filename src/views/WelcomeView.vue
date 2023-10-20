@@ -1,7 +1,7 @@
 <template>
     <div class="welcome">
         <h1 data-cy="welMessage" class="welcome__message">
-            Bem-vindo(a), {{ name }}
+            Bem-vindo(a) {{ name }}
         </h1>
 
         <button

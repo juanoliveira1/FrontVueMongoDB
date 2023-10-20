@@ -15,7 +15,7 @@ export default {
         }
 
         axios
-            .post('https://localhost:5000/Auth/login', UserLoginDto, {
+            .post('apimongodb.azurewebsites.net/Auth/login', UserLoginDto, {
                 headers,
             })
             .then((response) => {
@@ -31,34 +31,9 @@ export default {
                 }
             })
             .catch((error) => {
-                // Lidar com erros
-                console.error('Erro na requisição:', error)
-            })
 
-        // fetch('apimongodb.azurewebsites.net/Auth/login', {
-        //     method: 'POST',
-        //     body: JSON.stringify(UserLoginDto),
-        //     headers: { 'Content-Type': 'application/json' },
-        // })
-        //     .then((response) => {
-        //         if (!response.ok) {
-        //             console.log(response)
-        //             throw new Error('Erro na solicitação de login')
-        //         }
-        //         return response.json()
-        //     })
-        //     .then((data) => {
-        //         if (data.token) {
-        //             console.log('200')
-        //             commit('login', user.email)
-        //             localStorage.setItem('email', user.email)
-        //             localStorage.setItem('name', user.name)
-        //             router.push('/welcome')
-        //         }
-        //     })
-        //     .catch((error) => {
-        //         console.error(error)
-        //     })
+                console.error('Erro na requisição:', error)
+            })      
 
         // const userIndex = registeredUsers.findIndex(
         //     (usersData) =>
