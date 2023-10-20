@@ -18,6 +18,7 @@ export default {
         })
             .then((response) => {
                 if (!response.ok) {
+                    console.log(response);
                     throw new Error('Erro na solicitação de login')
                 }
                 return response.json()
