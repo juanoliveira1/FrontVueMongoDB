@@ -11,7 +11,7 @@ export default {
             Senha: user.password
         };
 
-        fetch('https://apimongodb.azurewebsites.net/Auth/login', {
+        fetch('apimongodb.azurewebsites.net/Auth/login', {
             method: 'POST',
             body: JSON.stringify(UserLoginDto),
             headers: { 'Content-Type': 'application/json' }
