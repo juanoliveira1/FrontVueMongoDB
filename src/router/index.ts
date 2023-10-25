@@ -11,22 +11,20 @@ const routes: Array<RouteRecordRaw> = [
         path: '/Login',
         name: 'Login',
         component: () =>
-            import(/* webpackChunkName: "login" */ '@/views/LoginView.vue'),
+            import('@/views/LoginView.vue'),
         meta: { requiresGuest: true, title: 'Login' },
     },
     {
         path: '/welcome',
         name: 'welcome',
         component: () =>
-            import(/* webpackChunkName: "welcome" */ '@/views/WelcomeView.vue'),
+            import('@/views/WelcomeView.vue'),
         meta: { requiresAuth: true, title: 'Welcome' },
     },
     {
         path: '/404',
         component: () =>
-            import(
-                /* webpackChunkName: "notFound" */ '@/views/NotFoundView.vue'
-            ),
+            import('@/views/NotFoundView.vue'),
         meta: { title: 'User Feedback & Bug reporting' },
     },
     {
@@ -42,7 +40,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     document.title =
-        (to.meta.title as string) || ('Instabug Login App' as string)
+        (to.meta.title as string) || ('Login' as string)
 
     const isAuth = store.getters.isAuth
     //Route Guards

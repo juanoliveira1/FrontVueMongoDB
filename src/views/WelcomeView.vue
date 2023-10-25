@@ -33,6 +33,7 @@ export default {
         return {
             logout,
             email,
+            name
         }
     },
 }

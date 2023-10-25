@@ -88,12 +88,11 @@ export default defineComponent({
         const login = async () => {
             store.dispatch('login', {
                 email: emailInput.value,
-                password: passwordInput.value})
-                
-            const isAuthenticated = store.getters.isAuth
-            isAuthenticated
-                ? router.push('/welcome')
-                : (loginFailed.value = true)
+                password: passwordInput.value,
+            })
+
+            const isAuthenticated = store.getters.isAuth;
+            isAuthenticated ? router.push('/welcome') : (loginFailed.value = true)
         }
 
         return {
