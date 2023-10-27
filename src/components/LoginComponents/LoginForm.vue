@@ -1,11 +1,7 @@
 <template>
     <section class="login-wrapper">
         <form class="login-wrapper__login-form" @submit.prevent="login">
-            <transition name="fade">
-                <div v-if="loginFailed" class="login-wrapper__login-form__alert" data-cy="logAlert">
-                    Seu email e/ou senha estão incorretos.
-                </div>
-            </transition>
+
 
             <Form-Text-Field fieldType="email" labelTitle="Email" labelLink="" errorMessage="Email invalido."
                 @inputChanged="emailChanged" :isValidInput="emailValid" inputName="email" />
@@ -28,7 +24,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { useStore } from '@/store'
-import router from '@/router'
 
 import FormTextField from '@/components/global/FormTextField.vue'
 
@@ -90,9 +85,6 @@ export default defineComponent({
                 email: emailInput.value,
                 password: passwordInput.value,
             })
-
-            const isAuthenticated = store.getters.isAuth;
-            isAuthenticated ? router.push('/welcome') : (loginFailed.value = true)
         }
 
         return {
