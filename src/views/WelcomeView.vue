@@ -18,31 +18,37 @@
             </b-row>
         </header>
         <div style="background-color: #03000f;">
-          <b-row class="full-width">
-  
+            <b-row class="full-width">
                 <b-col sm="6" md="4" lg="3" v-for="(blob, blobIndex) in blobList" :key="blobIndex">
                     <b-card :title="blob.descricao" class="mb-3">
-                        <img :src="blob.uri" class="img-fluid" alt="Imagem" />
+                        <template v-if="blob.uri.endsWith('.mp4')">
+                            <video style="width: 100%" controls loop autoplay>
+                                <source :src="blob.uri" type="video/mp4">
+                            </video>
+                        </template>
+                        <template v-else>
+                            <img :src="blob.uri" class="img-fluid" alt="Imagem" />
+                        </template>
                     </b-card>
                 </b-col>
             </b-row>
         </div>
     </div>
-  </template>
+</template>
   
-  <script>
-  import axios from "axios";
-  import { useStore } from '@/store'
-  import router from '@/router'
-  import { ref, onMounted, Vue } from "vue";
-  import toastr from 'toastr'
-  import 'toastr/build/toastr.css'
-  
-  const blobList = ref([]);
-  const currentPage = ref(0);
-  
-  
-  const loadMoreBlobs = async () => {
+<script>
+import axios from "axios";
+import { useStore } from '@/store'
+import router from '@/router'
+import { ref, onMounted, Vue } from "vue";
+import toastr from 'toastr'
+import 'toastr/build/toastr.css'
+
+const blobList = ref([]);
+const currentPage = ref(0);
+
+
+const loadMoreBlobs = async () => {
     currentPage.value++;
     await axios.get('https://apimongodb.azurewebsites.net/Blob/list', {
         params: {
@@ -56,29 +62,29 @@
         catch(error => {
             toastr.error('Erro ao buscar Blobs', 'Erro');
         })
-  };
-  
-  export default {
+};
+
+export default {
     setup() {
         const store = useStore()
         const email = store.getters.userEmail
         const name = store.getters.name
-  
+
         function logout() {
             currentPage.value = 0;
             blobList.value = null;
             store.dispatch('logout')
             router.push('/login')
         }
-  
+
         function upload() {
             console.log('Upload click');
         }
-  
+
         onMounted(() => {
             loadMoreBlobs();
         });
-  
+
         return {
             logout,
             email,
@@ -87,22 +93,23 @@
             currentPage
         }
     },
-  };
-  </script>
+};
+</script>
   
-  <style lang="scss" scoped>
-  .full-width {
+<style lang="scss" scoped>
+.full-width {
     width: 100%;
-  }
-  .login-header {
+}
+
+.login-header {
     &_logo_img {
         width: 100px;
         height: 100px;
         margin-bottom: 18px;
     }
-  }
-  
-  .verde-btn {
+}
+
+.verde-btn {
     width: fit-content;
     margin: 0 auto;
     padding: 22px 34px;
@@ -113,5 +120,5 @@
     cursor: pointer;
     margin-top: 20px;
     margin-left: 10px;
-  }
-  </style>
+}
+</style>
