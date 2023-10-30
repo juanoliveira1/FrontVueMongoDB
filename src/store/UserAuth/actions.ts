@@ -24,8 +24,7 @@ export default {
         try {
             await axios
                 .post(
-                    // 'https://apimongodbv-2.azurewebsites.net/Auth/login',
-                    'https://localhost:5000/Auth/login',
+                    'https://apimongodb.azurewebsites.net/Auth/login',
                     UserLoginDto,
                     { headers }
                 )

@@ -44,7 +44,7 @@
   
   const loadMoreBlobs = async () => {
     currentPage.value++;
-    await axios.get('https://localhost:5000/Blob/list', {
+    await axios.get('https://apimongodb.azurewebsites.net/Blob/list', {
         params: {
             page: currentPage.value,
             pageSize: 12,
