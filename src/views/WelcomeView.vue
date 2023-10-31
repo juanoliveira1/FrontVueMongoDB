@@ -126,20 +126,16 @@ const loadMoreBlobs = async () => {
 }
 
 export default {
-    data() {
-    return {
-      descricao: '', 
-      arquivo: null,
-    };
-  },
     setup() {
         const store = useStore()
         const email = store.getters.userEmail
         const name = store.getters.name
-        const showModal = ref(false);
+        const showModal = ref(false)
+        const descricao = '';
+        const arquivo = null;
 
        function handleFileChange(event) {
-      this.arquivo = event.target.files[0];
+      this.arquivo = event.target.files[0]; //Aqui está recebendo nada
       console.log('arquivo : ' + this.arquivo);
     }
 
@@ -159,22 +155,22 @@ export default {
       }
 
       function enviarArquivo(){
-        console.log(this.arquivo);
-        console.log(this.descricao);
-        if(!this.arquivo || !this.descricao){
-            toastr.warning('Preencher arquivo e descrição !');
-            return;
-        }
-        const request = {
-            userName : this.name,
-            comentario : this.descricao,
-            file: this.arquivo
-        }
-        const response = axios.post('https://localhost:5000/Blob/upload',request);
-        console.log(response);
+        console.log(arquivo);
+        console.log(descricao);
+        // if(!this.arquivo || !this.descricao){
+        //     toastr.warning('Preencher arquivo e descrição !');
+        //     return;
+        // }
+        // const request = {
+        //     userName : this.name,
+        //     comentario : this.descricao,
+        //     file: this.arquivo
+        // }
+        // const response = axios.post('https://localhost:5000/Blob/upload',request);
+        // console.log(response);
 
 
-        console.log('arquivo enviado');
+        // console.log('arquivo enviado');
     
     }
 
@@ -192,6 +188,8 @@ export default {
             carregarMais,
             abrirModal,
 
+            descricao,
+            arquivo,
             email,
             name,
             blobList,
