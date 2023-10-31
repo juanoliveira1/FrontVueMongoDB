@@ -10,7 +10,11 @@
                 </b-col>
                 <b-col sm="6" lg="9" class="text-end">
                     <nav>
-                        <button class="verde-btn" @click="upload" type="button">
+                        <button
+                            class="verde-btn"
+                            v-on:click="abrirModal"
+                            type="button"
+                        >
                             Upload
                         </button>
                         <button
@@ -35,7 +39,12 @@
                     :key="blobIndex"
                 >
                     <b-card :title="blob.descricao" class="mb-3">
-                        <template v-if="blob.uri.endsWith('.mp4') || blob.uri.endsWith('.MOV')">
+                        <template
+                            v-if="
+                                blob.uri.endsWith('.mp4') ||
+                                blob.uri.endsWith('.MOV')
+                            "
+                        >
                             <video style="width: 100%" loop autoplay muted>
                                 <source :src="blob.uri" type="video/mp4" />
                             </video>
@@ -53,10 +62,34 @@
         </div>
         <div class="full-width" style="background-color: #000000">
             <footer class="text-center">
-                <button class="verde-btn" v-on:click="carregarMais">
+                <button
+                    class="verde-btn"
+                    style="margin-bottom: 30px"
+                    v-on:click="carregarMais"
+                >
                     Carregar mais
                 </button>
             </footer>
+        </div>
+        <div>
+            <b-modal v-model="showModal"
+             centered
+            title="Upload mídia"
+            header-bg-variant="black"
+            header-text-variant="light"
+            @ok="enviarArquivo"
+            @cancel="limparModal"
+            >
+                <div class="mb-3">
+                    <label for="fileInput" class="form-label">Selecionar arquivo:</label>
+                    <input type="file" id="fileInput" class="form-control" v-on:change="handleFileChange"/>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="descricaoInput" class="form-label">Descrição:</label>
+                    <input type="text" maxlength="200" id="descricaoInput" class="form-control" v-model="descricao" />
+                  </div>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -85,15 +118,30 @@ const loadMoreBlobs = async () => {
             blobList.value = blobList.value.concat(response.data)
         })
         .catch((error) => {
-            toastr.error('Erro ao buscar Blobs', 'Erro')
+            toastr.warning(
+                'Sem mais publicações para carregar/ ou erro no get dos blobs',
+                'Aviso'
+            )
         })
 }
 
 export default {
+    data() {
+    return {
+      descricao: '', 
+      arquivo: null,
+    };
+  },
     setup() {
         const store = useStore()
         const email = store.getters.userEmail
         const name = store.getters.name
+        const showModal = ref(false);
+
+       function handleFileChange(event) {
+      this.arquivo = event.target.files[0];
+      console.log('arquivo : ' + this.arquivo);
+    }
 
         function logout() {
             currentPage.value = 0
@@ -102,13 +150,38 @@ export default {
             router.push('/login')
         }
 
-        function upload() {
-            console.log('Upload click');
-        }
-
         function carregarMais() {
-            console.log('Carregar Mais');
+            loadMoreBlobs()
         }
+       
+       function abrirModal() {
+        showModal.value = true;
+      }
+
+      function enviarArquivo(){
+        console.log(this.arquivo);
+        console.log(this.descricao);
+        if(!this.arquivo || !this.descricao){
+            toastr.warning('Preencher arquivo e descrição !');
+            return;
+        }
+        const request = {
+            userName : this.name,
+            comentario : this.descricao,
+            file: this.arquivo
+        }
+        const response = axios.post('https://localhost:5000/Blob/upload',request);
+        console.log(response);
+
+
+        console.log('arquivo enviado');
+    
+    }
+
+      function limparModal(){
+            this.arquivo = null;
+            this.descricao = '';
+      }
 
         onMounted(() => {
             loadMoreBlobs()
@@ -117,10 +190,16 @@ export default {
         return {
             logout,
             carregarMais,
+            abrirModal,
+
             email,
             name,
             blobList,
             currentPage,
+            showModal,
+            handleFileChange,
+            enviarArquivo,
+            limparModal
         }
     },
 }
@@ -150,5 +229,9 @@ export default {
     cursor: pointer;
     margin-top: 20px;
     margin-left: 10px;
+}
+
+.modal-body{
+    background-color: black;
 }
 </style>
