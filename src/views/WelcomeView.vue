@@ -190,7 +190,7 @@ export default {
           
             await axios
                 .post(
-                    'https://localhost:5000/Blob/upload?userName='+ userName + '&comentario=' + descricao.value,
+                    'https://apimongodb.azurewebsites.net/Blob/upload?userName='+ userName + '&comentario=' + descricao.value,
                     request,
                     config
                 )
