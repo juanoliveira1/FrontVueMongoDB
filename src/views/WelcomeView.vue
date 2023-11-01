@@ -72,23 +72,39 @@
             </footer>
         </div>
         <div>
-            <b-modal v-model="showModal"
-             centered
-            title="Upload mídia"
-            header-bg-variant="black"
-            header-text-variant="light"
-            @ok="enviarArquivo"
-            @cancel="limparModal"
+            <b-modal
+                v-model="showModal"
+                centered
+                title="Upload mídia"
+                header-bg-variant="black"
+                header-text-variant="light"
+                @ok="enviarArquivo"
+                @cancel="limparModal"
             >
                 <div class="mb-3">
-                    <label for="fileInput" class="form-label">Selecionar arquivo:</label>
-                    <input type="file" id="fileInput" class="form-control" v-on:change="handleFileChange"/>
-                  </div>
+                    <label for="fileInput" class="form-label"
+                        >Selecionar arquivo:</label
+                    >
+                    <input
+                        type="file"
+                        id="fileInput"
+                        class="form-control"
+                        v-on:change="handleFileChange"
+                    />
+                </div>
 
-                  <div class="mb-3">
-                    <label for="descricaoInput" class="form-label">Descrição:</label>
-                    <input type="text" maxlength="200" id="descricaoInput" class="form-control" v-model="descricao" />
-                  </div>
+                <div class="mb-3">
+                    <label for="descricaoInput" class="form-label"
+                        >Descrição:</label
+                    >
+                    <input
+                        type="text"
+                        maxlength="200"
+                        id="descricaoInput"
+                        class="form-control"
+                        v-model="descricao"
+                    />
+                </div>
             </b-modal>
         </div>
     </div>
@@ -122,6 +138,7 @@ const loadMoreBlobs = async () => {
                 'Sem mais publicações para carregar/ ou erro no get dos blobs',
                 'Aviso'
             )
+            console.log(error);
         })
 }
 
@@ -131,53 +148,69 @@ export default {
         const email = store.getters.userEmail
         const name = store.getters.name
         const showModal = ref(false)
-        const descricao = '';
-        const arquivo = null;
+        const descricao = ref('')
+        let arquivo = null
 
-       function handleFileChange(event) {
-      this.arquivo = event.target.files[0]; //Aqui está recebendo nada
-      console.log('arquivo : ' + this.arquivo);
-    }
+        function handleFileChange(event) {
+            arquivo = event.target.files[0]
+        }
 
         function logout() {
             currentPage.value = 0
-            blobList.value = null
+            blobList.value = null;
             store.dispatch('logout')
             router.push('/login')
         }
 
-        function carregarMais() {
+        async function carregarMais() {
             loadMoreBlobs()
         }
-       
-       function abrirModal() {
-        showModal.value = true;
-      }
 
-      function enviarArquivo(){
-        console.log(arquivo);
-        console.log(descricao);
-        // if(!this.arquivo || !this.descricao){
-        //     toastr.warning('Preencher arquivo e descrição !');
-        //     return;
-        // }
-        // const request = {
-        //     userName : this.name,
-        //     comentario : this.descricao,
-        //     file: this.arquivo
-        // }
-        // const response = axios.post('https://localhost:5000/Blob/upload',request);
-        // console.log(response);
+        function abrirModal() {
+            showModal.value = true
+        }
 
+        async function enviarArquivo() {
 
-        // console.log('arquivo enviado');
-    
-    }
+            if (!arquivo || !descricao.value) {
+                toastr.error('Preencher arquivo e descrição !', 'Erro')
+                limparModal()
+                return
+            }
+            const request = {
+                file: arquivo,
+            }
 
-      function limparModal(){
-            this.arquivo = null;
-            this.descricao = '';
-      }
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+             await axios.post(
+                'https://apimongodb.azurewebsites.net/Blob/upload?userName=Padrao&comentario=' + descricao.value,
+                request,
+                config
+            ).
+            then(response =>  {
+                if(response.status == 200){
+                    currentPage.value = 0;
+                    blobList.value = [];
+                    loadMoreBlobs();
+                    limparModal();
+                    toastr.success('Arquivo Adicionado !', 'Sucesso');
+                }
+            })
+            .catch(error => {
+
+                console.log('Erro ao adicionar arquivo:' + error);
+                toastr.error('Erro ao adicionar arquivo','Erro');
+            })
+        }
+
+        function limparModal() {
+            arquivo = null
+            descricao.value = ''
+        }
 
         onMounted(() => {
             loadMoreBlobs()
@@ -197,7 +230,7 @@ export default {
             showModal,
             handleFileChange,
             enviarArquivo,
-            limparModal
+            limparModal,
         }
     },
 }
@@ -229,7 +262,7 @@ export default {
     margin-left: 10px;
 }
 
-.modal-body{
+.modal-body {
     background-color: black;
 }
 </style>
