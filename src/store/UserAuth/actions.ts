@@ -38,7 +38,7 @@ export default {
                 })
         } catch (error: any) {
             if (error.response.status == 401) {
-                toastr.warning('Email e/ou senha incorretos.', 'Aviso')
+                toastr.error('Email e/ou senha incorretos.', 'Aviso')
             } else {
                 toastr.error('Erro na requisição de login', 'Erro')
             }

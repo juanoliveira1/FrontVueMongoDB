@@ -116,7 +116,9 @@ import { useStore } from '@/store'
 import router from '@/router'
 import { ref, onMounted, Vue } from 'vue'
 import toastr from 'toastr'
-import 'toastr/build/toastr.css'
+
+import 'bootstrap/dist/css/bootstrap.css';
+import '@/assets/css/toastr-styles.css';
 
 const blobList = ref([])
 const currentPage = ref(0)
@@ -134,7 +136,7 @@ const loadMoreBlobs = async () => {
             blobList.value = blobList.value.concat(response.data)
         })
         .catch((error) => {
-            toastr.warning(
+            toastr.error(
                 'Sem mais publicações para carregar/ ou erro no get dos blobs',
                 'Aviso'
             )
@@ -173,7 +175,7 @@ export default {
         async function enviarArquivo() {
 
             if (!arquivo || !descricao.value) {
-                toastr.error('Preencher arquivo e descrição !', 'Erro')
+                toastr.warning('Preencher arquivo e descrição !', 'Erro')
                 limparModal()
                 return
             }
@@ -237,10 +239,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .full-width {
     width: 100%;
 }
-
 .login-header {
     &_logo_img {
         width: 100px;
