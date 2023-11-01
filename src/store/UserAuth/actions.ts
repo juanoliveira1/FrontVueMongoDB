@@ -9,7 +9,10 @@ import 'toastr/build/toastr.css'
 
 export default {
     setup() {
-        const store = useStore()
+        const store = useStore();
+        return {
+            store
+        };
     },
 
     async login({ commit }: { commit: Commit }, user: UserType) {
@@ -32,6 +35,8 @@ export default {
                     if (response.status == 200) {
                         localStorage.setItem('email', user.email)
                         localStorage.setItem('name', response.data.name)
+                        console.log(localStorage.getItem('email'));
+                        console.log(localStorage.getItem('name'));
                         commit('login', user.email, response.data.name)
                         router.push('/welcome')
                     }
