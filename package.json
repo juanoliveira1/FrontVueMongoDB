@@ -11,8 +11,7 @@
     },
     "dependencies": {
         "axios": "^1.5.1",
-        "bootstrap": "^5.3.2",
-        "bootstrap-vue": "^2.23.1",
+        "b-toast": "^0.1.4",
         "bootstrap-vue-3": "^0.5.1",
         "core-js": "^3.8.3",
         "toastr": "^2.1.4",

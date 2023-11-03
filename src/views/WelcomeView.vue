@@ -70,7 +70,9 @@ import { useStore } from '@/store'
 import router from '@/router'
 import { ref, onMounted, Vue } from 'vue'
 import toastr from 'toastr'
-import 'toastr/build/toastr.css'
+
+import 'bootstrap/dist/css/bootstrap.css'
+import '@/assets/css/toastr-styles.css'
 
 const blobList = ref([])
 const currentPage = ref(0)
@@ -88,19 +90,17 @@ const loadMoreBlobs = async () => {
             blobList.value = blobList.value.concat(response.data);
         })
         .catch((error) => {
-            toastr.warning(
+            toastr.error(
                 'Sem mais publicações para carregar/ ou erro no get dos blobs',
                 'Aviso'
             )
-            console.log(error);
+            console.log(error)
         })
 }
 
 export default {
     setup() {
         const store = useStore()
-        const email = store.getters.userEmail
-        const name = store.getters.name
         const showModal = ref(false)
         const descricao = ref('')
         let arquivo = null
@@ -111,7 +111,7 @@ export default {
 
         function logout() {
             currentPage.value = 0
-            blobList.value = null;
+            blobList.value = null
             store.dispatch('logout')
             router.push('/login')
         }
@@ -125,9 +125,9 @@ export default {
         }
 
         async function enviarArquivo() {
-
+            
             if (!arquivo || !descricao.value) {
-                toastr.error('Preencher arquivo e descrição !', 'Erro')
+                toastr.warning('Preencher arquivo e descrição !', 'Erro')
                 limparModal()
                 return
             }
@@ -140,24 +140,25 @@ export default {
                     'Content-Type': 'multipart/form-data',
                 },
             }
-            await axios.post(
-                'https://apimongodb.azurewebsites.net/Blob/upload?userName=Padrao&comentario=' + descricao.value,
-                request,
-                config
-            ).
-                then(response => {
+            const userName = localStorage.getItem('name');
+          
+            await axios
+                .post(
+                    'https://apimongodb.azurewebsites.net/Blob/upload?userName='+ userName + '&comentario=' + descricao.value,
+                    request,
+                    config
+                )
+                .then((response) => {
                     if (response.status == 200) {
-                        currentPage.value = 0;
-                        blobList.value = [];
-                        loadMoreBlobs();
-                        limparModal();
-                        toastr.success('Arquivo Adicionado !', 'Sucesso');
+                        currentPage.value = 0
+                        blobList.value = []
+                        loadMoreBlobs()
+                        limparModal()
+                        toastr.success('Arquivo Adicionado !', 'Sucesso')
                     }
                 })
-                .catch(error => {
-
-                    console.log('Erro ao adicionar arquivo:' + error);
-                    toastr.error('Erro ao adicionar arquivo', 'Erro');
+                .catch((error) => {
+                    toastr.error('Erro ao adicionar arquivo', 'Erro')
                 })
         }
 
@@ -184,11 +185,8 @@ export default {
             logout,
             carregarMais,
             abrirModal,
-
             descricao,
             arquivo,
-            email,
-            name,
             blobList,
             currentPage,
             showModal,
@@ -230,7 +228,6 @@ export default {
 .full-width {
     width: 100%;
 }
-
 .login-header {
     &_logo_img {
         width: 100px;
