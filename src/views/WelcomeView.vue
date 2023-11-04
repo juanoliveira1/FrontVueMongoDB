@@ -32,7 +32,7 @@
                             <template v-else>
                                 <img :src="blob.uri" class="img-fluid" alt="Imagem" />
                             </template>
-                            <div class="media-description" @mouseover="showDescription(blob)" @mouseout="hideDescription()">
+                            <div class="media-description" @mouseover="showDescription(blob)">
                                 {{ blob.comentario }}
                             </div>
                         </div>
@@ -171,12 +171,6 @@ export default {
             blob.showDescription = true;
         }
 
-        function hideDescription() {
-            // for (let blob of this.blobList.value) {
-            //     blob.showDescription = false;
-            // }
-        }
-
         onMounted(() => {
             loadMoreBlobs()
         })
@@ -193,8 +187,7 @@ export default {
             handleFileChange,
             enviarArquivo,
             limparModal,
-            showDescription,
-            hideDescription
+            showDescription
         }
     },
 }

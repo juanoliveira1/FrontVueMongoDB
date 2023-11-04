@@ -25,6 +25,7 @@ export default {
         }
 
         try {
+            console.log('Olha aqui João');
             await axios
                 .post(
                     'https://apimongodb.azurewebsites.net/Auth/login',
@@ -35,8 +36,6 @@ export default {
                     if (response.status == 200) {
                         localStorage.setItem('email', user.email)
                         localStorage.setItem('name', response.data.name)
-                        console.log(localStorage.getItem('email'));
-                        console.log(localStorage.getItem('name'));
                         commit('login', user.email, response.data.name)
                         router.push('/welcome')
                     }
