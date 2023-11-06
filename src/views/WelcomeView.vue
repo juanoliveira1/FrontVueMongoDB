@@ -94,7 +94,6 @@ const loadMoreBlobs = async () => {
                 'Sem mais publicações para carregar/ ou erro no get dos blobs',
                 'Aviso'
             )
-            console.log(error)
         })
 }
 
