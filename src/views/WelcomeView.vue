@@ -3,14 +3,26 @@
         <header class="bg-black">
             <b-row>
                 <b-col sm="6" lg="3">
-                    <img class="login-header_logo_img" src="@/assets/imgs/coracao_verde.svg" />
+                    <img
+                        class="login-header_logo_img"
+                        src="@/assets/imgs/coracao_verde.svg"
+                    />
                 </b-col>
                 <b-col sm="6" lg="9" class="text-end">
                     <nav>
-                        <button class="verde-btn" v-on:click="abrirModal" type="button">
+                        <button
+                            class="verde-btn"
+                            v-on:click="abrirModal"
+                            type="button"
+                        >
                             Upload
                         </button>
-                        <button data-cy="logoutBtn" class="verde-btn" @click="logout" type="button">
+                        <button
+                            data-cy="logoutBtn"
+                            class="verde-btn"
+                            @click="logout"
+                            type="button"
+                        >
                             Log out
                         </button>
                     </nav>
@@ -19,30 +31,59 @@
         </header>
         <div style="background-color: #000000">
             <b-row class="full-width">
-                <b-col sm="6" md="4" lg="3" v-for="(blob, blobIndex) in blobList" :key="blobIndex">
+                <b-col
+                    sm="6"
+                    md="4"
+                    lg="3"
+                    v-for="(blob, blobIndex) in blobList"
+                    :key="blobIndex"
+                >
                     <b-card class="mb-3">
                         <div class="media-container">
-                            <template v-if="blob.uri.endsWith('.mp4') ||
-                                blob.uri.endsWith('.MOV')
-                                ">
+                            <template
+                                v-if="
+                                    blob.uri.endsWith('.mp4') ||
+                                    blob.uri.endsWith('.MOV')
+                                "
+                            >
                                 <video style="width: 100%" loop autoplay muted>
                                     <source :src="blob.uri" type="video/mp4" />
                                 </video>
                             </template>
                             <template v-else>
-                                <img :src="blob.uri" class="img-fluid" alt="Imagem" />
+                                <img
+                                    :src="blob.uri"
+                                    class="img-fluid"
+                                    alt="Imagem"
+                                />
                             </template>
-                            <div class="media-description" @mouseover="showDescription(blob)"
-                                @mouseleave="cancelEditing(blob)" @click="startEditing(blob)">
+                            <div
+                                class="media-description"
+                                @mouseover="showDescription(blob)"
+                                @mouseleave="cancelEditing(blob)"
+                                @click="startEditing(blob)"
+                            >
                                 <template v-if="blob.editing">
                                     <div class="input-button-jogada">
-                                        <input type="text" v-model="blob.novoComentario" @input="onCommentChange(blob)"
-                                            class="input-transparent" :size="blob.novoComentario.length"/>
-                                        <button class="verde-btn-small" @click="saveComment(blob)">Editar</button>
+                                        <input
+                                            type="text"
+                                            v-model="blob.novoComentario"
+                                            @input="onCommentChange(blob)"
+                                            class="input-transparent"
+                                            :size="blob.novoComentario.length"
+                                        />
+                                        <button
+                                            class="verde-btn-small"
+                                            @click="saveComment(blob)"
+                                        >
+                                            Editar
+                                        </button>
                                     </div>
                                 </template>
                                 <template v-else>
-                                    <span class="break-word">{{ blob.novoComentario || blob.comentario }}</span>
+                                    <span class="break-word">{{
+                                        blob.novoComentario || blob.comentario
+                                    }}</span>
                                 </template>
                             </div>
                         </div>
@@ -52,22 +93,48 @@
         </div>
         <div class="full-width" style="background-color: #000000">
             <footer class="text-center">
-                <button class="verde-btn" style="margin-bottom: 30px" v-on:click="carregarMais">
+                <button
+                    class="verde-btn"
+                    style="margin-bottom: 30px"
+                    v-on:click="carregarMais"
+                >
                     Carregar mais
                 </button>
             </footer>
         </div>
         <div>
-            <b-modal v-model="showModal" centered title="Upload mídia" header-bg-variant="black" header-text-variant="light"
-                @ok="enviarArquivo" @cancel="limparModal">
+            <b-modal
+                v-model="showModal"
+                centered
+                title="Upload mídia"
+                header-bg-variant="black"
+                header-text-variant="light"
+                @ok="enviarArquivo"
+                @cancel="limparModal"
+            >
                 <div class="mb-3">
-                    <label for="fileInput" class="form-label">Selecionar arquivo:</label>
-                    <input type="file" id="fileInput" class="form-control" v-on:change="handleFileChange" />
+                    <label for="fileInput" class="form-label"
+                        >Selecionar arquivo:</label
+                    >
+                    <input
+                        type="file"
+                        id="fileInput"
+                        class="form-control"
+                        v-on:change="handleFileChange"
+                    />
                 </div>
 
                 <div class="mb-3">
-                    <label for="descricaoInput" class="form-label">Descrição:</label>
-                    <input type="text" maxlength="200" id="descricaoInput" class="form-control" v-model="descricao" />
+                    <label for="descricaoInput" class="form-label"
+                        >Descrição:</label
+                    >
+                    <input
+                        type="text"
+                        maxlength="200"
+                        id="descricaoInput"
+                        class="form-control"
+                        v-model="descricao"
+                    />
                 </div>
             </b-modal>
         </div>
@@ -200,8 +267,22 @@ export default {
         async function saveComment(blob) {
             blob.editing = false;
             const novoComentario = blob.novoComentario;
-            console.log(novoComentario);
-            blob.comentario = novoComentario;
+            const userName = localStorage.getItem('name');
+            const request = {
+                Id : blob.id,
+                NovoComentario : novoComentario,
+                UsuarioAlteracao : userName
+            }
+
+            try{
+                const response = await axios.put('https://apimongodb.azurewebsites.net/Blob/editComentario',request);
+            if(response.status == 200){
+               blob.comentario = blob.novoComentario;
+               toastr.success('Comentário alterado com sucesso','Sucesso');
+            }
+            }catch(error){
+                toastr.error(error.response.data);
+            }
         }
 
         onMounted(() => {
@@ -241,8 +322,8 @@ export default {
 }
 
 .break-word {
-  overflow-wrap: break-word;
-  word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
 }
 
 .input-button-jogada {
@@ -292,7 +373,6 @@ export default {
     color: black;
     border-radius: 20px;
     cursor: pointer;
-
 }
 
 .verde-btn {
