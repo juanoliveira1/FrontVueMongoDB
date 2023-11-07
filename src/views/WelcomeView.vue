@@ -32,8 +32,18 @@
                             <template v-else>
                                 <img :src="blob.uri" class="img-fluid" alt="Imagem" />
                             </template>
-                            <div class="media-description" @mouseover="showDescription(blob)">
-                                {{ blob.comentario }}
+                            <div class="media-description" @mouseover="showDescription(blob)"
+                                @mouseleave="cancelEditing(blob)" @click="startEditing(blob)">
+                                <template v-if="blob.editing">
+                                    <div class="input-button-jogada">
+                                        <input type="text" v-model="blob.novoComentario" @input="onCommentChange(blob)"
+                                            class="input-transparent" :size="blob.novoComentario.length"/>
+                                        <button class="verde-btn-small" @click="saveComment(blob)">Editar</button>
+                                    </div>
+                                </template>
+                                <template v-else>
+                                    <span class="break-word">{{ blob.novoComentario || blob.comentario }}</span>
+                                </template>
                             </div>
                         </div>
                     </b-card>
@@ -124,7 +134,7 @@ export default {
         }
 
         async function enviarArquivo() {
-            
+
             if (!arquivo || !descricao.value) {
                 toastr.warning('Preencher arquivo e descrição !', 'Erro')
                 limparModal()
@@ -140,10 +150,10 @@ export default {
                 },
             }
             const userName = localStorage.getItem('name');
-          
+
             await axios
                 .post(
-                    'https://apimongodb.azurewebsites.net/Blob/upload?userName='+ userName + '&comentario=' + descricao.value,
+                    'https://apimongodb.azurewebsites.net/Blob/upload?userName=' + userName + '&comentario=' + descricao.value,
                     request,
                     config
                 )
@@ -170,6 +180,30 @@ export default {
             blob.showDescription = true;
         }
 
+        function startEditing(blob) {
+            blob.editing = true;
+            blob.novoComentario = blob.comentario;
+        }
+
+        function onCommentChange(blob) {
+            console.log('onCommentChange: blob.comentario :' + blob.comentario);
+            console.log('onCommentChange: blob.novoComentario :' + blob.novoComentario);
+        }
+
+        function cancelEditing(blob) {
+            if (blob.editing) {
+                blob.editing = false;
+                blob.novoComentario = blob.comentario;
+            }
+        }
+
+        async function saveComment(blob) {
+            blob.editing = false;
+            const novoComentario = blob.novoComentario;
+            console.log(novoComentario);
+            blob.comentario = novoComentario;
+        }
+
         onMounted(() => {
             loadMoreBlobs()
         })
@@ -186,16 +220,36 @@ export default {
             handleFileChange,
             enviarArquivo,
             limparModal,
-            showDescription
+            showDescription,
+            startEditing,
+            onCommentChange,
+            saveComment,
+            cancelEditing
         }
     },
 }
 </script>
 
 <style lang="scss" scoped>
-// .media-container {
-//     position: relative;
-// }
+.input-transparent {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: white;
+    outline: none;
+    display: block;
+}
+
+.break-word {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.input-button-jogada {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
 
 .media-description {
     position: absolute;
@@ -220,12 +274,25 @@ export default {
 .full-width {
     width: 100%;
 }
+
 .login-header {
     &_logo_img {
         width: 100px;
         height: 100px;
         margin-bottom: 18px;
     }
+}
+
+.verde-btn-small {
+    width: fit-content;
+    margin: 0 auto;
+    padding: 10px 15px;
+    border: none;
+    background-color: #b1cc33;
+    color: black;
+    border-radius: 20px;
+    cursor: pointer;
+
 }
 
 .verde-btn {
