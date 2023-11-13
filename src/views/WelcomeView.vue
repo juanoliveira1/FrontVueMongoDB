@@ -68,7 +68,6 @@
                                         <input
                                             type="text"
                                             v-model="blob.novoComentario"
-                                            @input="onCommentChange(blob)"
                                             class="input-transparent"
                                             :size="blob.novoComentario.length"
                                         />
@@ -252,11 +251,6 @@ export default {
             blob.novoComentario = blob.comentario;
         }
 
-        function onCommentChange(blob) {
-            console.log('onCommentChange: blob.comentario :' + blob.comentario);
-            console.log('onCommentChange: blob.novoComentario :' + blob.novoComentario);
-        }
-
         function cancelEditing(blob) {
             if (blob.editing) {
                 blob.editing = false;
@@ -277,7 +271,7 @@ export default {
             try{
                 const response = await axios.put('https://apimongodb.azurewebsites.net/Blob/editComentario',request);
             if(response.status == 200){
-               blob.comentario = blob.novoComentario;
+               blob.comentario = novoComentario;
                toastr.success('Comentário alterado com sucesso','Sucesso');
             }
             }catch(error){
@@ -303,7 +297,6 @@ export default {
             limparModal,
             showDescription,
             startEditing,
-            onCommentChange,
             saveComment,
             cancelEditing
         }

@@ -25,7 +25,6 @@ export default {
         }
 
         try {
-            console.log('Olha aqui João');
             await axios
                 .post(
                     'https://apimongodb.azurewebsites.net/Auth/login',
