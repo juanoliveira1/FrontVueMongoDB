@@ -43,7 +43,8 @@
                             <template
                                 v-if="
                                     blob.uri.endsWith('.mp4') ||
-                                    blob.uri.endsWith('.MOV')
+                                    blob.uri.endsWith('.MOV') ||
+                                    blob.uri.endsWith('.mov')
                                 "
                             >
                                 <video style="width: 100%" loop autoplay muted>
