@@ -157,7 +157,7 @@ const currentPage = ref(0)
 const loadMoreBlobs = async () => {
     currentPage.value++
     await axios
-        .get('https://apimongodb.azurewebsites.net/Blob/list', {
+        .get('https://localhost:5000/Blob/list', {
             params: {
                 page: currentPage.value,
                 pageSize: 12,
@@ -220,7 +220,7 @@ export default {
 
             await axios
                 .post(
-                    'https://apimongodb.azurewebsites.net/Blob/upload?userName=' + userName + '&comentario=' + descricao.value,
+                    'https://localhost:5000/Blob/upload?userName=' + userName + '&comentario=' + descricao.value,
                     request,
                     config
                 )
@@ -270,7 +270,7 @@ export default {
             }
 
             try{
-                const response = await axios.put('https://apimongodb.azurewebsites.net/Blob/editComentario',request);
+                const response = await axios.put('https://localhost:5000/Blob/editComentario',request);
             if(response.status == 200){
                blob.comentario = novoComentario;
                toastr.success('Comentário alterado com sucesso','Sucesso');
